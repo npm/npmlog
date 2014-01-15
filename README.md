@@ -141,7 +141,7 @@ Style objects can have the following fields:
 * `bell` {Boolean} Make a noise (This is pretty annoying, probably.)
 * `fillDateIfEmpty` {Boolean} if prefix is empty, fill it with current date. Only for prefix.
 * `useMS` {Boolean} date in prefix is in milliseconds (true) or UTC string (false). Only for prefix.
-* 
+
 # Message Objects
 
 Every log event is emitted with a message object, and the `log.record`
