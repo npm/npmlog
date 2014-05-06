@@ -140,15 +140,15 @@ log.addLevel = function (lvl, n, style, disp) {
 }
 
 log.prefixStyle = { fg: 'magenta' }
-log.headingStyle = { fg: 'white', bg: 'black' }
+log.headingStyle = { fg: 'white' }
 
 log.style = {}
 log.levels = {}
 log.disp = {}
 log.addLevel('silly', -Infinity, { inverse: true }, 'sill')
-log.addLevel('verbose', 1000, { fg: 'blue', bg: 'black' }, 'verb')
+log.addLevel('verbose', 1000, { fg: 'blue' }, 'verb')
 log.addLevel('info', 2000, { fg: 'green' })
-log.addLevel('http', 3000, { fg: 'green', bg: 'black' })
+log.addLevel('http', 3000, { fg: 'green' })
 log.addLevel('warn', 4000, { fg: 'black', bg: 'yellow' }, 'WARN')
-log.addLevel('error', 5000, { fg: 'red', bg: 'black' }, 'ERR!')
+log.addLevel('error', 5000, { fg: 'red' }, 'ERR!')
 log.addLevel('silent', Infinity)
