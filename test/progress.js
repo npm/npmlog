@@ -74,3 +74,41 @@ test('clearProgress', function (t) {
   log.clearProgress()
   didActions(t, 'clearProgress disabled', [ ])
 })
+
+test("newItem", function (t) {
+  t.plan(12)
+  log.enableProgress()
+  actions = []
+  var a = log.newItem("test", 10)
+  didActions(t, "newItem", [ [ 'show', undefined, 0 ] ])
+  a.completeWork(5)
+  didActions(t, "newItem:completeWork", [ [ 'show', 'test', 0.5 ] ])
+  a.finish()
+  didActions(t, "newItem:finish", [ [ 'show', 'test', 1 ] ])
+})
+
+// test that log objects proxy through. And test that completion status filters up
+test("newGroup", function (t) {
+  t.plan(23)
+  var a = log.newGroup("newGroup")
+  didActions(t, "newGroup", [ [ 'show', undefined, 0.5 ] ])
+  a.warn("test", "this is a test")
+  didActions(t, "newGroup:warn", [ [ 'pulse', 'test' ], [ 'hide' ], [ 'show', undefined, 0.5 ] ])
+  var b = a.newItem("newGroup2", 10)
+  didActions(t, "newGroup:newItem", [ [ 'show', 'newGroup', 0.5 ] ])
+  b.completeWork(5)
+  didActions(t, "newGroup:completeWork", [ [ 'show', 'newGroup2', 0.75 ] ])
+  a.finish()
+  didActions(t, "newGroup:finish", [ [ 'show', 'newGroup', 1 ] ])
+})
+
+test("newStream", function (t) {
+  t.plan(13)
+  var a = log.newStream("newStream", 10)
+  didActions(t, "newStream", [ [ 'show', undefined, 0.6666666666666666 ] ])
+  a.write("abcde")
+  didActions(t, "newStream", [ [ 'show', 'newStream', 0.8333333333333333 ] ])
+  a.write("fghij")
+  didActions(t, "newStream", [ [ 'show', 'newStream', 1 ] ])
+  t.is(log.tracker.completed(), 1, "Overall completion")
+})
