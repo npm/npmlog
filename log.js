@@ -1,3 +1,6 @@
+'use strict'
+var Progress = require('are-we-there-yet')
+var Gauge = require('gauge')
 var EE = require('events').EventEmitter
 var log = exports = module.exports = new EE
 var util = require('util')
@@ -20,6 +23,57 @@ log.disableColor = function () {
 // default level
 log.level = 'info'
 
+log.gauge = new Gauge(log.cursor)
+log.tracker = new Progress.TrackerGroup()
+
+// no progress bars unless asked
+log.progressEnabled = false
+
+var unicodeEnabled = undefined
+log.enableUnicode = function () {
+  unicodeEnabled = true
+  log.gauge.theme = Gauge.unicode
+}
+log.disableUnicode = function () {
+  unicodeEnabled = false
+  log.gauge.theme = Gauge.ascii
+}
+
+log.enableProgress = function () {
+  if (this.progressEnabled) return
+  this.progressEnabled = true
+  if (this._pause) return
+  this.tracker.on('change', this.showProgress)
+  this.gauge.enable()
+  this.showProgress()
+}
+
+log.disableProgress = function () {
+  if (!this.progressEnabled) return
+  this.clearProgress()
+  this.progressEnabled = false
+  this.tracker.removeListener('change', this.showProgress)
+  this.gauge.disable()
+}
+
+log.newGroup = function (groupname) {
+  return this.tracker.newGroup(groupname)
+}
+
+log.newItem = function (itemname,todo) {
+  return this.tracker.newItem(itemname, todo)
+}
+
+log.clearProgress = function () {
+  if (!this.progressEnabled) return
+  this.gauge.hide()
+}
+
+log.showProgress = function (name) {
+  if (!this.progressEnabled) return
+  this.gauge.show(name, this.tracker.completed())
+}.bind(log) // bind for use in tracker's on-change listener
+
 // temporarily stop emitting, but don't drop
 log.pause = function () {
   this._paused = true
@@ -34,6 +88,7 @@ log.resume = function () {
   b.forEach(function (m) {
     this.emitLog(m)
   }, this)
+  if (this.progressEnabled) this.enableProgress()
 }
 
 log._buffer = []
@@ -88,6 +143,7 @@ log.emitLog = function (m) {
     this._buffer.push(m)
     return
   }
+  if (this.progressEnabled) this.gauge.pulse(m.prefix)
   var l = this.levels[m.level]
   if (l === undefined) return
   if (l < this.levels[this.level]) return
@@ -95,6 +151,7 @@ log.emitLog = function (m) {
 
   var style = log.style[m.level]
   var disp = log.disp[m.level] || m.level
+  this.clearProgress()
   m.message.split(/\r?\n/).forEach(function (line) {
     if (this.heading) {
       this.write(this.heading, this.headingStyle)
@@ -106,12 +163,18 @@ log.emitLog = function (m) {
     this.write(p, this.prefixStyle)
     this.write(' ' + line + '\n')
   }, this)
+  this.showProgress()
 }
 
 log.write = function (msg, style) {
   if (!this.cursor) return
   if (this.stream !== this.cursor.stream) {
     this.cursor = ansi(this.stream, { enabled: colorEnabled })
+    var options = {}
+    if (unicodeEnabled != null) {
+      options.theme = unicodeEnabled ? Gauge.unicode : Gauge.ascii
+    }
+    this.gauge = new Gauge(options, this.cursor)
   }
 
   style = style || {}
