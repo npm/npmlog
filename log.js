@@ -62,10 +62,12 @@ log.log = function (lvl, prefix, message) {
   if (stack) a.unshift(stack + '\n')
   message = util.format.apply(util, a)
 
-  if (!prefix && this.prefixStyle.fillDateIfEmpty) {
-    // shortest date formatting code, good enough
-    // OR use classic getDay(), getHours() ... methods, with some cfg...
-    prefix = this.prefixStyle.useMS ? Date.now() : (new Date()).toUTCString()
+  if (!prefix) {
+	if (this.prefixStyle.fillDateIfEmpty) {
+		// shortest date formatting code, good enough
+		// OR use classic getDay(), getHours() ... methods, with some cfg...
+		prefix = this.prefixStyle.useMS ? Date.now() : (new Date()).toUTCString()
+	}
   }
   var m = { id: id++,
             level: lvl,
