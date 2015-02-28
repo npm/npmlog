@@ -96,6 +96,10 @@ Force the unicode theme to be used for the progress bar.
 
 Disable the use of unicode in the progress bar.
 
+## log.setGaugeTemplate(template)
+
+Overrides the default gauge template.
+
 ## log.pause()
 
 Stop emitting messages to the stream, but do not drop them.

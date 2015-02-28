@@ -29,14 +29,22 @@ log.tracker = new Progress.TrackerGroup()
 // no progress bars unless asked
 log.progressEnabled = false
 
-var unicodeEnabled = undefined
+var gaugeTheme = undefined
+
 log.enableUnicode = function () {
-  unicodeEnabled = true
-  log.gauge.setTheme(Gauge.unicode)
+  gaugeTheme = gauge.unicode
+  log.gauge.setTheme(gaugeTheme)
 }
+
 log.disableUnicode = function () {
-  unicodeEnabled = false
-  log.gauge.setTheme(Gauge.ascii)
+  gaugeTheme = gauge.ascii
+  log.gauge.setTheme(gaugeTheme)
+}
+
+var gaugeTemplate = undefined
+log.setGaugeTemplate = function (template) {
+  gaugeTemplate = template
+  log.gauge.setTemplate(gaugeTemplate)
 }
 
 log.enableProgress = function () {
@@ -194,9 +202,8 @@ log.write = function (msg, style) {
   if (this.stream !== this.cursor.stream) {
     this.cursor = ansi(this.stream, { enabled: colorEnabled })
     var options = {}
-    if (unicodeEnabled != null) {
-      options.theme = unicodeEnabled ? Gauge.unicode : Gauge.ascii
-    }
+    if (gaugeTheme != null) options.theme = gaugeTheme
+    if (gaugeTemplate != null) options.template = gaugeTemplate
     this.gauge = new Gauge(options, this.cursor)
   }
 
