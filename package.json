@@ -5,7 +5,7 @@
   "version": "1.2.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/isaacs/npmlog.git"
+    "url": "git://github.com/npm/npmlog.git"
   },
   "main": "log.js",
   "scripts": {
