@@ -19,5 +19,5 @@
   "devDependencies": {
     "tap": ""
   },
-  "license": "BSD"
+  "license": "ISC"
 }
