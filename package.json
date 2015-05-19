@@ -2,7 +2,7 @@
   "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
   "name": "npmlog",
   "description": "logger for npm",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/isaacs/npmlog.git"
