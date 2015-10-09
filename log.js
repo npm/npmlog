@@ -148,6 +148,13 @@ log.log = function (lvl, prefix, message) {
   if (stack) a.unshift(stack + '\n')
   message = util.format.apply(util, a)
 
+  if (!prefix) {
+	if (this.prefixStyle.fillDateIfEmpty) {
+		// shortest date formatting code, good enough
+		// OR use classic getDay(), getHours() ... methods, with some cfg...
+		prefix = this.prefixStyle.useMS ? Date.now() : (new Date()).toUTCString()
+	}
+  }
   var m = { id: id++,
             level: lvl,
             prefix: String(prefix || ''),
@@ -245,3 +252,20 @@ log.addLevel('http', 3000, { fg: 'green', bg: 'black' })
 log.addLevel('warn', 4000, { fg: 'black', bg: 'yellow' }, 'WARN')
 log.addLevel('error', 5000, { fg: 'red', bg: 'black' }, 'ERR!')
 log.addLevel('silent', Infinity)
+
+var util = require('util')
+var already;
+log.enhance = function (log) {
+	if (already) return log
+	// use date for each log record
+	util._extend(log.prefixStyle, { fillDateIfEmpty: true, useMS: true })
+
+	// don't need to write '' for each log statement
+	log.info = log.info.bind(undefined, '')
+	log.error = log.error.bind(undefined, '')
+	log.warn = log.warn.bind(undefined, '')
+	log.verbose = log.verbose.bind(undefined, '')
+	log.http = log.http.bind(undefined, '')
+	already = true
+	return log
+}

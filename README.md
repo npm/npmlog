@@ -181,6 +181,8 @@ Style objects can have the following fields:
 * `bg` {String} Color for the background
 * `bold`, `inverse`, `underline` {Boolean} Set the associated property
 * `bell` {Boolean} Make a noise (This is pretty annoying, probably.)
+* `fillDateIfEmpty` {Boolean} if prefix is empty, fill it with current date. Only for prefix.
+* `useMS` {Boolean} date in prefix is in milliseconds (true) or UTC string (false). Only for prefix.
 
 # Message Objects
 
