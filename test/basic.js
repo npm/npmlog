@@ -9,21 +9,21 @@ var logPrefixEvents = []
 var util = require('util')
 
 var resultExpect =
-[ '\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[7msill\u001b[0m \u001b[0m\u001b[35msilly prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[34m\u001b[40mverb\u001b[0m \u001b[0m\u001b[35mverbose prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[32minfo\u001b[0m \u001b[0m\u001b[35minfo prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[32m\u001b[40mhttp\u001b[0m \u001b[0m\u001b[35mhttp prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[30m\u001b[43mWARN\u001b[0m \u001b[0m\u001b[35mwarn prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[31m\u001b[40mERR!\u001b[0m \u001b[0m\u001b[35merror prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[32minfo\u001b[0m \u001b[0m\u001b[35minfo prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[32m\u001b[40mhttp\u001b[0m \u001b[0m\u001b[35mhttp prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[30m\u001b[43mWARN\u001b[0m \u001b[0m\u001b[35mwarn prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[31m\u001b[40mERR!\u001b[0m \u001b[0m\u001b[35merror prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
-  '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[31m\u001b[40mERR!\u001b[0m \u001b[0m\u001b[35m404\u001b[0m This is a longer\n',
-  '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[31m\u001b[40mERR!\u001b[0m \u001b[0m\u001b[35m404\u001b[0m message, with some details\n',
-  '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[31m\u001b[40mERR!\u001b[0m \u001b[0m\u001b[35m404\u001b[0m and maybe a stack.\n',
-  '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[31m\u001b[40mERR!\u001b[0m \u001b[0m\u001b[35m404\u001b[0m \n',
-  '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u0007noise\u001b[0m\u001b[35m\u001b[0m LOUD NOISES\n',
+[ '\u001b[37mnpm\u001b[0m \u001b[0m\u001b[7msill\u001b[0m \u001b[0m\u001b[35msilly prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\u001b[0m\u001b[37mnpm\u001b[0m \u001b[0m\u001b[34mverb\u001b[0m \u001b[0m\u001b[35mverbose prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\u001b[0m\u001b[37mnpm\u001b[0m \u001b[0m\u001b[32minfo\u001b[0m \u001b[0m\u001b[35minfo prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\u001b[0m\u001b[37mnpm\u001b[0m \u001b[0m\u001b[32mhttp\u001b[0m \u001b[0m\u001b[35mhttp prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\u001b[0m\u001b[37mnpm\u001b[0m \u001b[0m\u001b[30m\u001b[43mWARN\u001b[0m \u001b[0m\u001b[35mwarn prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\u001b[0m\u001b[37mnpm\u001b[0m \u001b[0m\u001b[31mERR!\u001b[0m \u001b[0m\u001b[35merror prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\u001b[0m\u001b[37mnpm\u001b[0m \u001b[0m\u001b[32minfo\u001b[0m \u001b[0m\u001b[35minfo prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\u001b[0m\u001b[37mnpm\u001b[0m \u001b[0m\u001b[32mhttp\u001b[0m \u001b[0m\u001b[35mhttp prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\u001b[0m\u001b[37mnpm\u001b[0m \u001b[0m\u001b[30m\u001b[43mWARN\u001b[0m \u001b[0m\u001b[35mwarn prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\u001b[0m\u001b[37mnpm\u001b[0m \u001b[0m\u001b[31mERR!\u001b[0m \u001b[0m\u001b[35merror prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
+  '\u001b[0m\u001b[37mnpm\u001b[0m \u001b[0m\u001b[31mERR!\u001b[0m \u001b[0m\u001b[35m404\u001b[0m This is a longer\n',
+  '\u001b[0m\u001b[37mnpm\u001b[0m \u001b[0m\u001b[31mERR!\u001b[0m \u001b[0m\u001b[35m404\u001b[0m message, with some details\n',
+  '\u001b[0m\u001b[37mnpm\u001b[0m \u001b[0m\u001b[31mERR!\u001b[0m \u001b[0m\u001b[35m404\u001b[0m and maybe a stack.\n',
+  '\u001b[0m\u001b[37mnpm\u001b[0m \u001b[0m\u001b[31mERR!\u001b[0m \u001b[0m\u001b[35m404\u001b[0m \n',
+  '\u001b[0m\u001b[37mnpm\u001b[0m \u001b[0m\u0007noise\u001b[0m\u001b[35m\u001b[0m LOUD NOISES\n',
   '\u001b[0m' ]
 
 var logPrefixEventsExpect =
