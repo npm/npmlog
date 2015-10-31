@@ -9,6 +9,15 @@ var ansi = require('ansi')
 log.cursor = ansi(process.stderr)
 log.stream = process.stderr
 
+// UTC timestamp, disabled by default.
+this.timestampEnabled = false
+log.enableTimestamp = function () {
+  this.timestampEnabled = true
+}
+log.disableTimestamp = function () {
+  this.timestampEnabled = false
+}
+
 // by default, let ansi decide based on tty-ness.
 var colorEnabled = undefined
 log.enableColor = function () {
@@ -184,6 +193,10 @@ log.emitLog = function (m) {
   var disp = log.disp[m.level] || m.level
   this.clearProgress()
   m.message.split(/\r?\n/).forEach(function (line) {
+    if (this.timestampEnabled) {
+      this.write(Date.now() + '', this.timestampStyle)
+      this.write(' ')
+    }
     if (this.heading) {
       this.write(this.heading, this.headingStyle)
       this.write(' ')
@@ -233,6 +246,7 @@ log.addLevel = function (lvl, n, style, disp) {
 }
 
 log.prefixStyle = { fg: 'magenta' }
+log.timestampStyle = {fg: 'lightGrey'};
 log.headingStyle = { fg: 'white', bg: 'black' }
 
 log.style = {}
