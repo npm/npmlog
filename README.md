@@ -80,6 +80,14 @@ stream.
 
 Disable colors on all messages.
 
+## log.enableTimestamp()
+
+Enable UTC timestamps to be printed before all messages.
+
+## log.disableTimestamp()
+
+Disable UTC timestamps from being printed.
+
 ## log.enableProgress()
 
 Enable the display of log activity spinner and progress bar
