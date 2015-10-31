@@ -194,7 +194,7 @@ log.emitLog = function (m) {
   this.clearProgress()
   m.message.split(/\r?\n/).forEach(function (line) {
     if (this.timestampEnabled) {
-      this.write(Date.now() + '', this.timestampStyle)
+      this.write(Date.now().toString(), this.timestampStyle)
       this.write(' ')
     }
     if (this.heading) {
