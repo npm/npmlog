@@ -17,7 +17,7 @@
     "gauge": "~1.2.0"
   },
   "devDependencies": {
-    "tap": "~1.2.0"
+    "tap": "~2.2.0"
   },
   "license": "ISC"
 }
