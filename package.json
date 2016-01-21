@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "ansi": "~0.3.0",
-    "are-we-there-yet": "~1.0.0",
+    "are-we-there-yet": "~1.0.5",
     "gauge": "~1.2.4"
   },
   "devDependencies": {
