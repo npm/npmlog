@@ -47,7 +47,11 @@ log.setGaugeTemplate = function (template) {
   log.gauge.setTemplate(gaugeTemplate)
 }
 
-log.enableProgress = function () {
+log.enableProgress = function (throttle) {
+  if (typeof throttle === "number") {
+    this.progressThrottle = throttle
+    this.lastProgressShow = 0
+  }
   if (this.progressEnabled) return
   this.progressEnabled = true
   if (this._pause) return
@@ -58,6 +62,7 @@ log.enableProgress = function () {
 
 log.disableProgress = function () {
   if (!this.progressEnabled) return
+  this.progressThrottle = 0 // disabled
   this.clearProgress()
   this.progressEnabled = false
   this.tracker.removeListener('change', this.showProgress)
@@ -102,6 +107,11 @@ log.clearProgress = function () {
 
 log.showProgress = function (name) {
   if (!this.progressEnabled) return
+  if (this.progressThrottle > 0) {
+    var now = Date.now()
+    if (now - this.lastProgressShow < this.progressThrottle) return
+    this.lastProgressShow = now
+  }
   this.gauge.show(name, this.tracker.completed())
 }.bind(log) // bind for use in tracker's on-change listener
 
