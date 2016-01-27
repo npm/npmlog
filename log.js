@@ -64,37 +64,6 @@ log.disableProgress = function () {
   this.gauge.disable()
 }
 
-var trackerConstructors = ['newGroup', 'newItem', 'newStream']
-
-var mixinLog = function (tracker) {
-  // mixin the public methods from log into the tracker
-  // (except: conflicts and one's we handle specially)
-  Object.keys(log).forEach(function (P) {
-    if (P[0] === '_') return
-    if (trackerConstructors.filter(function (C) { return C === P }).length) return
-    if (tracker[P]) return
-    if (typeof log[P] !== 'function') return
-    var func = log[P]
-    tracker[P] = function () {
-      return func.apply(log, arguments)
-    }
-  })
-  // if the new tracker is a group, make sure any subtrackers get
-  // mixed in too
-  if (tracker instanceof Progress.TrackerGroup) {
-    trackerConstructors.forEach(function (C) {
-      var func = tracker[C]
-      tracker[C] = function () { return mixinLog(func.apply(tracker, arguments)) }
-    })
-  }
-  return tracker
-}
-
-// Add tracker constructors to the top level log object
-trackerConstructors.forEach(function (C) {
-  log[C] = function () { return mixinLog(this.tracker[C].apply(this.tracker, arguments)) }
-})
-
 log.clearProgress = function () {
   if (!this.progressEnabled) return
   this.gauge.hide()
@@ -248,3 +217,31 @@ log.addLevel('silent', Infinity)
 
 // allow 'error' prefix
 log.on('error', function(){})
+
+// We want the log object to share the methods from the tracker,
+// and vice-versa, so mix them into each other.
+var trackerConstructors = ['newGroup', 'newItem', 'newStream']
+
+// mixin the public methods from log into the tracker
+// (except: conflicts and one's we handle specially)
+Object.keys(log).forEach(function (P) {
+  if (P[0] === '_') return
+  if (trackerConstructors.filter(function (C) { return C === P }).length) return
+  if (typeof log[P] !== 'function') return
+  var func = log[P]
+  if (!Progress.TrackerGroup.prototype[P]) {
+    Progress.TrackerGroup.prototype[P] = function () {
+      return func.apply(log, arguments)
+    }
+  }
+  if (!Progress.Tracker.prototype[P]) {
+    Progress.Tracker.prototype[P] = function () {
+      return func.apply(log, arguments)
+    }
+  }
+})
+
+// Add tracker constructors to the top level log object
+trackerConstructors.forEach(function (C) {
+  log[C] = function () { return log.tracker[C].apply(log.tracker, arguments) }
+})
