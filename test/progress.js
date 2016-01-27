@@ -31,7 +31,7 @@ function didActions(t, msg, output) {
   }
   t.is(actions.length, output.length, msg)
   tests.forEach(function (test) {
-    t.is(actions[test.cmd] ? actions[test.cmd][test.arg] : null, 
+    t.is(actions[test.cmd] ? actions[test.cmd][test.arg] : null,
          output[test.cmd][test.arg],
          msg + ': ' + output[test.cmd] + (test.arg ? ' arg #'+test.arg : ''))
   })
@@ -44,6 +44,18 @@ test('enableProgress', function (t) {
   log.enableProgress()
   didActions(t, 'enableProgress', [ [ 'enable' ], [ 'show', undefined, 0 ] ])
   log.enableProgress()
+  didActions(t, 'enableProgress again', [])
+})
+
+test('enableProgress with throttling', function (t) {
+  t.plan(11)
+  log.disableProgress()
+  didActions(t, 'disableProgress', [ [ 'hide' ], [ 'disable' ] ])
+  log.enableProgress(100)
+  t.is(log.progressThrottle, 100)
+  didActions(t, 'enableProgress', [ [ 'enable' ], [ 'show', undefined, 0 ] ])
+  log.enableProgress(200)
+  t.is(log.progressThrottle, 200)
   didActions(t, 'enableProgress again', [])
 })
 
@@ -60,9 +72,30 @@ test('showProgress', function (t) {
   log.showProgress('foo')
   didActions(t, 'showProgress disabled', [])
   log.enableProgress()
-  actions = []
+  actions = [] // clear actions, since enableProgress calls showProgress with no name
   log.showProgress('foo')
   didActions(t, 'showProgress', [ [ 'show', 'foo', 0 ] ])
+})
+
+test('showProgress with throttling', function (t) {
+  log.disableProgress()
+  didActions(t, 'disableProgress', [ [ 'hide' ], [ 'disable' ] ])
+  log.showProgress('foo')
+  t.is(log.progressThrottle, 0)
+  didActions(t, 'showProgress disabled', [])
+  log.enableProgress(100)
+  t.is(log.progressThrottle, 100)
+  // enableProgress calls showProgress with no name
+  didActions(t, 'enableProgress', [ [ 'enable' ], [ 'show', undefined, 0 ] ])
+  log.showProgress('bar') // nothing should happen
+  setTimeout(function() {
+    log.showProgress('baz') // nothing
+  }, 5)
+  setTimeout(function() {
+    log.showProgress('biff') // should print
+    didActions(t, 'showProgress after throttle', [ [ 'show', 'biff', 0 ] ])
+    t.end()
+  }, 101)
 })
 
 test('clearProgress', function (t) {
