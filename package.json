@@ -14,7 +14,7 @@
   "dependencies": {
     "ansi": "~0.3.1",
     "are-we-there-yet": "~1.1.2",
-    "gauge": "~1.2.5"
+    "gauge": "~2.5.0"
   },
   "devDependencies": {
     "tap": "~5.7.0"
