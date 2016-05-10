@@ -98,7 +98,13 @@ Disable the use of unicode in the progress bar.
 
 ## log.setGaugeTemplate(template)
 
-Overrides the default gauge template.
+Set a template for outputting the progress bar. See the [gauge documentation] for details.
+
+[gauge documentation]: https://npmjs.com/package/gauge
+
+## log.setGaugeThemeset(themes)
+
+Select a themeset to pick themes from for the progress bar. See the [gauge documentation] for details.
 
 ## log.pause()
 
