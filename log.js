@@ -141,6 +141,10 @@ log.log = function (lvl, prefix, message) {
     return this.emit('error', new Error(util.format(
       'Undefined log level: %j', lvl)))
   }
+  var l = this.levels[lvl]
+  if (l === undefined) return
+  if (l < this.levels[this.level]) return
+  if (l > 0 && !isFinite(l)) return
 
   var a = new Array(arguments.length - 2)
   var stack = null
@@ -183,10 +187,6 @@ log.emitLog = function (m) {
     return
   }
   if (this.progressEnabled) this.gauge.pulse(m.prefix)
-  var l = this.levels[m.level]
-  if (l === undefined) return
-  if (l < this.levels[this.level]) return
-  if (l > 0 && !isFinite(l)) return
 
   var style = log.style[m.level]
   var disp = log.disp[m.level] || m.level
