@@ -6,6 +6,9 @@ var log = exports = module.exports = new EE
 var util = require('util')
 
 var ansi = require('ansi')
+var setBlocking = require('set-blocking')
+
+setBlocking(true)
 log.cursor = ansi(process.stderr)
 log.stream = process.stderr
 

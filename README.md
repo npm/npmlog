@@ -199,3 +199,12 @@ following fields:
 * `prefix` {String}
 * `message` {String} Result of `util.format()`
 * `messageRaw` {Array} Arguments to `util.format()`
+
+# Blocking TTYs
+
+We use [`set-blocking`](https://npmjs.com/package/set-blocking) to set
+stderr and stdout blocking if they are tty's and have the setBlocking call.
+This is a work around for an issue in early versions of Node.js 6.x, which
+made stderr and stdout non-blocking on OSX. (They are always blocking
+Windows and were never blocking on Linux.) `npmlog` needs them to be blocking
+so that it can allow output to stdout and stderr to be interlaced.
