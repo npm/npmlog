@@ -14,37 +14,41 @@ var colorEnabled = undefined
 log.enableColor = function () {
   colorEnabled = true
   this.cursor.enabled = true
+  this.gauge.setTheme({hasColor: colorEnabled, hasUnicode: unicodeEnabled})
 }
 log.disableColor = function () {
   colorEnabled = false
   this.cursor.enabled = false
+  this.gauge.setTheme({hasColor: colorEnabled, hasUnicode: unicodeEnabled})
 }
 
 // default level
 log.level = 'info'
 
-log.gauge = new Gauge(log.cursor)
+log.gauge = new Gauge(log.cursor, {tty: log.stream})
 log.tracker = new Progress.TrackerGroup()
 
 // no progress bars unless asked
 log.progressEnabled = false
 
-var gaugeTheme = undefined
+var unicodeEnabled = undefined
 
 log.enableUnicode = function () {
-  gaugeTheme = Gauge.unicode
-  log.gauge.setTheme(gaugeTheme)
+  unicodeEnabled = true
+  this.gauge.setTheme({hasColor: colorEnabled, hasUnicode: unicodeEnabled})
 }
 
 log.disableUnicode = function () {
-  gaugeTheme = Gauge.ascii
-  log.gauge.setTheme(gaugeTheme)
+  unicodeEnabled = false
+  this.gauge.setTheme({hasColor: colorEnabled, hasUnicode: unicodeEnabled})
 }
 
-var gaugeTemplate = undefined
+log.setGaugeThemeset = function (themes) {
+  this.gauge.setThemeset(themes)
+}
+
 log.setGaugeTemplate = function (template) {
-  gaugeTemplate = template
-  log.gauge.setTemplate(gaugeTemplate)
+  this.gauge.setTemplate(template)
 }
 
 log.enableProgress = function () {
@@ -95,9 +99,9 @@ trackerConstructors.forEach(function (C) {
   log[C] = function () { return mixinLog(this.tracker[C].apply(this.tracker, arguments)) }
 })
 
-log.clearProgress = function () {
-  if (!this.progressEnabled) return
-  this.gauge.hide()
+log.clearProgress = function (cb) {
+  if (!this.progressEnabled) return cb && process.nextTick(cb)
+  this.gauge.hide(cb)
 }
 
 log.showProgress = function (name, completed) {
@@ -202,10 +206,7 @@ log.write = function (msg, style) {
   if (!this.cursor) return
   if (this.stream !== this.cursor.stream) {
     this.cursor = ansi(this.stream, { enabled: colorEnabled })
-    var options = {}
-    if (gaugeTheme != null) options.theme = gaugeTheme
-    if (gaugeTemplate != null) options.template = gaugeTemplate
-    this.gauge = new Gauge(options, this.cursor)
+    this.gauge.setWriteTo(this.cursor, this.stream)
   }
 
   style = style || {}
