@@ -6,8 +6,6 @@ var logEvents = []
 var logInfoEvents = []
 var logPrefixEvents = []
 
-var util = require('util')
-
 var resultExpect =
 [ '\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[7msill\u001b[0m \u001b[0m\u001b[35msilly prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
   '\u001b[0m\u001b[37m\u001b[40mnpm\u001b[0m \u001b[0m\u001b[34m\u001b[40mverb\u001b[0m \u001b[0m\u001b[35mverbose prefix\u001b[0m x = {"foo":{"bar":"baz"}}\n',
@@ -183,7 +181,6 @@ log.stream = s
 
 log.heading = 'npm'
 
-
 tap.test('basic', function (t) {
   log.on('log', logEvents.push.bind(logEvents))
   log.on('log.info', logInfoEvents.push.bind(logInfoEvents))
@@ -191,35 +188,35 @@ tap.test('basic', function (t) {
 
   console.error('log.level=silly')
   log.level = 'silly'
-  log.silly('silly prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.verbose('verbose prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.info('info prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.http('http prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.warn('warn prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.error('error prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.silent('silent prefix', 'x = %j', {foo:{bar:'baz'}})
+  log.silly('silly prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.verbose('verbose prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.info('info prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.http('http prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.warn('warn prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.error('error prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.silent('silent prefix', 'x = %j', {foo: {bar: 'baz'}})
 
   console.error('log.level=silent')
   log.level = 'silent'
-  log.silly('silly prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.verbose('verbose prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.info('info prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.http('http prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.warn('warn prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.error('error prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.silent('silent prefix', 'x = %j', {foo:{bar:'baz'}})
+  log.silly('silly prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.verbose('verbose prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.info('info prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.http('http prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.warn('warn prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.error('error prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.silent('silent prefix', 'x = %j', {foo: {bar: 'baz'}})
 
   console.error('log.level=info')
   log.level = 'info'
-  log.silly('silly prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.verbose('verbose prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.info('info prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.http('http prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.warn('warn prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.error('error prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.silent('silent prefix', 'x = %j', {foo:{bar:'baz'}})
-  log.error('404', 'This is a longer\n'+
-                   'message, with some details\n'+
+  log.silly('silly prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.verbose('verbose prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.info('info prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.http('http prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.warn('warn prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.error('error prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.silent('silent prefix', 'x = %j', {foo: {bar: 'baz'}})
+  log.error('404', 'This is a longer\n' +
+                   'message, with some details\n' +
                    'and maybe a stack.\n')
   log.addLevel('noise', 10000, {beep: true})
   log.noise(false, 'LOUD NOISES')

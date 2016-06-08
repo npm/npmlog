@@ -23,23 +23,23 @@ log.gauge = {
   }
 }
 
-function didActions(t, msg, output) {
+function didActions (t, msg, output) {
   var tests = []
-  for (var ii = 0; ii < output.length; ++ ii) {
-    for (var jj = 0; jj < output[ii].length; ++ jj) {
+  for (var ii = 0; ii < output.length; ++ii) {
+    for (var jj = 0; jj < output[ii].length; ++jj) {
       tests.push({cmd: ii, arg: jj})
     }
   }
   t.is(actions.length, output.length, msg)
   tests.forEach(function (test) {
-    t.is(actions[test.cmd] ? actions[test.cmd][test.arg] : null, 
+    t.is(actions[test.cmd] ? actions[test.cmd][test.arg] : null,
          output[test.cmd][test.arg],
-         msg + ': ' + output[test.cmd] + (test.arg ? ' arg #'+test.arg : ''))
+         msg + ': ' + output[test.cmd] + (test.arg ? ' arg #' + test.arg : ''))
   })
   actions = []
 }
 
-function resetTracker() {
+function resetTracker () {
   log.disableProgress()
   log.tracker = new Progress.TrackerGroup()
   log.enableProgress()
@@ -90,42 +90,42 @@ test('clearProgress', function (t) {
   didActions(t, 'clearProgress disabled', [ ])
 })
 
-test("newItem", function (t) {
+test('newItem', function (t) {
   t.plan(12)
   resetTracker()
   actions = []
-  var a = log.newItem("test", 10)
-  didActions(t, "newItem", [ [ 'show', 'test', 0 ] ])
+  var a = log.newItem('test', 10)
+  didActions(t, 'newItem', [ [ 'show', 'test', 0 ] ])
   a.completeWork(5)
-  didActions(t, "newItem:completeWork", [ [ 'show', 'test', 0.5 ] ])
+  didActions(t, 'newItem:completeWork', [ [ 'show', 'test', 0.5 ] ])
   a.finish()
-  didActions(t, "newItem:finish", [ [ 'show', 'test', 1 ] ])
+  didActions(t, 'newItem:finish', [ [ 'show', 'test', 1 ] ])
 })
 
 // test that log objects proxy through. And test that completion status filters up
-test("newGroup", function (t) {
+test('newGroup', function (t) {
   t.plan(23)
   resetTracker()
-  var a = log.newGroup("newGroup")
+  var a = log.newGroup('newGroup')
   didActions(t, 'newGroup', [[ 'show', 'newGroup', 0 ]])
-  a.warn("test", "this is a test")
-  didActions(t, "newGroup:warn", [ [ 'pulse', 'test' ], [ 'hide' ], [ 'show', undefined, 0 ] ])
-  var b = a.newItem("newGroup2", 10)
-  didActions(t, "newGroup:newItem", [ [ 'show', 'newGroup2', 0 ] ])
+  a.warn('test', 'this is a test')
+  didActions(t, 'newGroup:warn', [ [ 'pulse', 'test' ], [ 'hide' ], [ 'show', undefined, 0 ] ])
+  var b = a.newItem('newGroup2', 10)
+  didActions(t, 'newGroup:newItem', [ [ 'show', 'newGroup2', 0 ] ])
   b.completeWork(5)
-  didActions(t, "newGroup:completeWork", [ [ 'show', 'newGroup2', 0.5] ])
+  didActions(t, 'newGroup:completeWork', [ [ 'show', 'newGroup2', 0.5 ] ])
   a.finish()
-  didActions(t, "newGroup:finish", [ [ 'show', 'newGroup', 1 ] ])
+  didActions(t, 'newGroup:finish', [ [ 'show', 'newGroup', 1 ] ])
 })
 
-test("newStream", function (t) {
+test('newStream', function (t) {
   t.plan(13)
   resetTracker()
-  var a = log.newStream("newStream", 10)
-  didActions(t, "newStream", [ [ 'show', 'newStream', 0 ] ])
-  a.write("abcde")
-  didActions(t, "newStream", [ [ 'show', 'newStream', 0.5 ] ])
-  a.write("fghij")
-  didActions(t, "newStream", [ [ 'show', 'newStream', 1 ] ])
-  t.is(log.tracker.completed(), 1, "Overall completion")
+  var a = log.newStream('newStream', 10)
+  didActions(t, 'newStream', [ [ 'show', 'newStream', 0 ] ])
+  a.write('abcde')
+  didActions(t, 'newStream', [ [ 'show', 'newStream', 0.5 ] ])
+  a.write('fghij')
+  didActions(t, 'newStream', [ [ 'show', 'newStream', 1 ] ])
+  t.is(log.tracker.completed(), 1, 'Overall completion')
 })

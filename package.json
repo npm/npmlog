@@ -12,7 +12,7 @@
     "log.js"
   ],
   "scripts": {
-    "test": "tap test/*.js"
+    "test": "standard && tap test/*.js"
   },
   "dependencies": {
     "ansi": "~0.3.1",
@@ -21,6 +21,7 @@
     "set-blocking": "~2.0.0"
   },
   "devDependencies": {
+    "standard": "~7.1.2",
     "tap": "~5.7.0"
   },
   "license": "ISC"

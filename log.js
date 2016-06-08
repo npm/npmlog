@@ -2,7 +2,7 @@
 var Progress = require('are-we-there-yet')
 var Gauge = require('gauge')
 var EE = require('events').EventEmitter
-var log = exports = module.exports = new EE
+var log = exports = module.exports = new EE()
 var util = require('util')
 
 var ansi = require('ansi')
@@ -13,7 +13,7 @@ log.cursor = ansi(process.stderr)
 log.stream = process.stderr
 
 // by default, let ansi decide based on tty-ness.
-var colorEnabled = undefined
+var colorEnabled
 log.enableColor = function () {
   colorEnabled = true
   this.cursor.enabled = true
@@ -34,7 +34,7 @@ log.tracker = new Progress.TrackerGroup()
 // no progress bars unless asked
 log.progressEnabled = false
 
-var unicodeEnabled = undefined
+var unicodeEnabled
 
 log.enableUnicode = function () {
   unicodeEnabled = true
@@ -144,8 +144,8 @@ log.log = function (lvl, prefix, message) {
 
   var a = new Array(arguments.length - 2)
   var stack = null
-  for (var i = 2; i < arguments.length; i ++) {
-    var arg = a[i-2] = arguments[i]
+  for (var i = 2; i < arguments.length; i++) {
+    var arg = a[i - 2] = arguments[i]
 
     // resolve stack traces to a plain string.
     if (typeof arg === 'object' && arg &&
@@ -188,7 +188,6 @@ log.emitLog = function (m) {
   if (l < this.levels[this.level]) return
   if (l > 0 && !isFinite(l)) return
 
-  var style = log.style[m.level]
   var disp = log.disp[m.level] || m.level
   this.clearProgress()
   m.message.split(/\r?\n/).forEach(function (line) {
@@ -226,14 +225,16 @@ log.addLevel = function (lvl, n, style, disp) {
   if (!disp) disp = lvl
   this.levels[lvl] = n
   this.style[lvl] = style
-  if (!this[lvl]) this[lvl] = function () {
-    var a = new Array(arguments.length + 1)
-    a[0] = lvl
-    for (var i = 0; i < arguments.length; i ++) {
-      a[i + 1] = arguments[i]
-    }
-    return this.log.apply(this, a)
-  }.bind(this)
+  if (!this[lvl]) {
+    this[lvl] = function () {
+      var a = new Array(arguments.length + 1)
+      a[0] = lvl
+      for (var i = 0; i < arguments.length; i++) {
+        a[i + 1] = arguments[i]
+      }
+      return this.log.apply(this, a)
+    }.bind(this)
+  }
   this.disp[lvl] = disp
 }
 
@@ -252,4 +253,4 @@ log.addLevel('error', 5000, { fg: 'red', bg: 'black' }, 'ERR!')
 log.addLevel('silent', Infinity)
 
 // allow 'error' prefix
-log.on('error', function(){})
+log.on('error', function () {})
