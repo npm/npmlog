@@ -15,27 +15,45 @@ log.gauge = {
   hide: function () {
     actions.push(['hide'])
   },
-  show: function (name, completed) {
-    actions.push(['show', name, completed])
+  show: function () {
+    actions.push(['show'].concat(Array.prototype.slice.call(arguments)))
   },
   pulse: function (name) {
     actions.push(['pulse', name])
   }
 }
 
-function didActions (t, msg, output) {
-  var tests = []
-  for (var ii = 0; ii < output.length; ++ii) {
-    for (var jj = 0; jj < output[ii].length; ++jj) {
-      tests.push({cmd: ii, arg: jj})
+function recursiveMatch (t, actual, expected, desc) {
+  if (expected instanceof RegExp) {
+    return t.match(actual, expected, desc + ' matches')
+  } else if (typeof expected === 'boolean') {
+    return t.is(!!actual, expected, desc + ' exists')
+  } else if (typeof expected !== 'object' || expected == null) {
+    return t.is(actual, expected, desc + ' are equal')
+  } else {
+    if (actual == null) actual = {}
+    Object.keys(expected).forEach(function (key) {
+      recursiveMatch(t, actual && actual[key], expected[key], desc + ':' + key)
+    })
+    if (Array.isArray(actual)) {
+      if (!t.is(actual.length, expected.length, desc + ' has matching length')) {
+        t.comment('    Actual: ', actual)
+        t.comment('    Expected: ', expected)
+      }
+    } else {
+      Object.keys(actual).forEach(function (key) {
+        if (expected[key] == null) t.fail(desc + ':' + key + ' should not be set')
+      })
     }
   }
+}
+
+function didActions (t, msg, output) {
   t.is(actions.length, output.length, msg)
-  tests.forEach(function (test) {
-    t.is(actions[test.cmd] ? actions[test.cmd][test.arg] : null,
-         output[test.cmd][test.arg],
-         msg + ': ' + output[test.cmd] + (test.arg ? ' arg #' + test.arg : ''))
-  })
+
+  for (var cmd = 0; cmd < output.length; ++cmd) {
+    recursiveMatch(t, actions[cmd], output[cmd], msg + ':' + output[cmd][0])
+  }
   actions = []
 }
 
@@ -47,18 +65,18 @@ function resetTracker () {
 }
 
 test('enableProgress', function (t) {
-  t.plan(6)
+  t.plan(7)
   resetTracker()
   log.disableProgress()
   actions = []
   log.enableProgress()
-  didActions(t, 'enableProgress', [ [ 'enable' ], [ 'show', undefined, 0 ] ])
+  didActions(t, 'enableProgress', [ [ 'enable' ], [ 'show', {completed: 0} ] ])
   log.enableProgress()
   didActions(t, 'enableProgress again', [])
 })
 
 test('disableProgress', function (t) {
-  t.plan(4)
+  t.plan(6)
   resetTracker()
   log.disableProgress()
   didActions(t, 'disableProgress', [ [ 'hide' ], [ 'disable' ] ])
@@ -67,7 +85,7 @@ test('disableProgress', function (t) {
 })
 
 test('showProgress', function (t) {
-  t.plan(5)
+  t.plan(6)
   resetTracker()
   log.disableProgress()
   actions = []
@@ -76,11 +94,11 @@ test('showProgress', function (t) {
   log.enableProgress()
   actions = []
   log.showProgress('foo')
-  didActions(t, 'showProgress', [ [ 'show', 'foo', 0 ] ])
+  didActions(t, 'showProgress', [ [ 'show', {section: 'foo', completed: 0} ] ])
 })
 
 test('clearProgress', function (t) {
-  t.plan(3)
+  t.plan(4)
   resetTracker()
   log.clearProgress()
   didActions(t, 'clearProgress', [ [ 'hide' ] ])
@@ -91,41 +109,95 @@ test('clearProgress', function (t) {
 })
 
 test('newItem', function (t) {
-  t.plan(12)
+  t.plan(21)
   resetTracker()
   actions = []
   var a = log.newItem('test', 10)
-  didActions(t, 'newItem', [ [ 'show', 'test', 0 ] ])
+  didActions(t, 'newItem', [ [ 'show', {
+    'section': 'test',
+    'completed': 0,
+    subsection: false,
+    logline: false
+  } ] ])
   a.completeWork(5)
-  didActions(t, 'newItem:completeWork', [ [ 'show', 'test', 0.5 ] ])
+  didActions(t, 'newItem:completeWork', [ [ 'show', {
+    'section': 'test',
+    'completed': 0.5,
+    subsection: false,
+    logline: false
+  } ] ])
   a.finish()
-  didActions(t, 'newItem:finish', [ [ 'show', 'test', 1 ] ])
+  didActions(t, 'newItem:finish', [ [ 'show', {
+    'section': 'test',
+    'completed': 1,
+    subsection: false,
+    logline: false
+  } ] ])
 })
 
 // test that log objects proxy through. And test that completion status filters up
 test('newGroup', function (t) {
-  t.plan(23)
+  t.plan(39)
   resetTracker()
   var a = log.newGroup('newGroup')
-  didActions(t, 'newGroup', [[ 'show', 'newGroup', 0 ]])
+  didActions(t, 'newGroup', [[ 'show', {
+    'section': 'newGroup',
+    'completed': 0,
+    subsection: false,
+    logline: false
+  } ]])
   a.warn('test', 'this is a test')
-  didActions(t, 'newGroup:warn', [ [ 'pulse', 'test' ], [ 'hide' ], [ 'show', undefined, 0 ] ])
+  didActions(t, 'newGroup:warn', [ [ 'pulse', 'test' ], [ 'hide' ], [ 'show', {
+    subsection: 'test',
+    logline: /this is a test$/,
+    completed: 0
+  } ] ])
   var b = a.newItem('newGroup2', 10)
-  didActions(t, 'newGroup:newItem', [ [ 'show', 'newGroup2', 0 ] ])
+  didActions(t, 'newGroup:newItem', [ [ 'show', {
+    'section': 'newGroup2',
+    'completed': 0,
+    subsection: true,
+    logline: true
+  } ] ])
   b.completeWork(5)
-  didActions(t, 'newGroup:completeWork', [ [ 'show', 'newGroup2', 0.5 ] ])
+  didActions(t, 'newGroup:completeWork', [ [ 'show', {
+    'section': 'newGroup2',
+    'completed': 0.5,
+    subsection: true,
+    logline: true
+  } ] ])
   a.finish()
-  didActions(t, 'newGroup:finish', [ [ 'show', 'newGroup', 1 ] ])
+  didActions(t, 'newGroup:finish', [ [ 'show', {
+    'section': 'newGroup',
+    'completed': 1,
+    subsection: true,
+    logline: true
+  } ] ])
 })
 
 test('newStream', function (t) {
-  t.plan(13)
+  t.plan(22)
   resetTracker()
   var a = log.newStream('newStream', 10)
-  didActions(t, 'newStream', [ [ 'show', 'newStream', 0 ] ])
+  didActions(t, 'newStream', [ [ 'show', {
+    completed: 0,
+    section: 'newStream',
+    subsection: true,
+    logline: true
+  } ] ])
   a.write('abcde')
-  didActions(t, 'newStream', [ [ 'show', 'newStream', 0.5 ] ])
+  didActions(t, 'newStream', [ [ 'show', {
+    completed: 0.5,
+    section: 'newStream',
+    subsection: true,
+    logline: true
+  } ] ])
   a.write('fghij')
-  didActions(t, 'newStream', [ [ 'show', 'newStream', 1 ] ])
+  didActions(t, 'newStream', [ [ 'show', {
+    completed: 1,
+    section: 'newStream',
+    subsection: true,
+    logline: true
+  } ] ])
   t.is(log.tracker.completed(), 1, 'Overall completion')
 })

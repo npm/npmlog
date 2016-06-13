@@ -28,7 +28,16 @@ log.disableColor = function () {
 // default level
 log.level = 'info'
 
-log.gauge = new Gauge(log.cursor, {tty: log.stream})
+log.gauge = new Gauge(log.cursor, {
+  tty: log.stream,
+  template: [
+    {type: 'progressbar', length: 20},
+    {type: 'activityIndicator', kerning: 1, length: 1},
+    {type: 'section'},
+    ':',
+    {type: 'logline', kerning: 1}
+  ]
+})
 log.tracker = new Progress.TrackerGroup()
 
 // no progress bars unless asked
@@ -109,8 +118,19 @@ log.clearProgress = function (cb) {
 
 log.showProgress = function (name, completed) {
   if (!this.progressEnabled) return
-  if (completed == null) completed = this.tracker.completed()
-  this.gauge.show(name, completed)
+  var values = {}
+  if (name) values.section = name
+  var last = log.record[log.record.length - 1]
+  if (last) {
+    values.subsection = last.prefix
+    var disp = log.disp[last.level] || last.level
+    var logline = disp
+    if (last.prefix) logline += ' ' + last.prefix
+    logline += ' ' + last.message.split(/\r?\n/)[0]
+    values.logline = logline
+  }
+  values.completed = completed || this.tracker.completed()
+  this.gauge.show(values)
 }.bind(log) // bind for use in tracker's on-change listener
 
 // temporarily stop emitting, but don't drop
