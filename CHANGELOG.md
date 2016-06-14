@@ -1,3 +1,12 @@
+### v3.1.0
+
+* Update to `gauge@2.5.2`:
+  * Updates the `signal-exit` dependency which fixes an incompatibility with
+    the node profiler.
+  * Uses externalizes its ansi code generation in `console-control-strings`
+* Make the default progress bar include the last line printed, colored as it
+  would be when printing to a tty.
+
 ### v3.0.0
 
 * Switch to `gauge@2.0.0`, for better performance, better look.
