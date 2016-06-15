@@ -134,8 +134,8 @@ log.showProgress = function (name, completed) {
   if (last) {
     values.subsection = last.prefix
     var disp = log.disp[last.level] || last.level
-    var logline = disp
-    if (last.prefix) logline += ' ' + last.prefix
+    var logline = this._format(disp, log.style[last.level])
+    if (last.prefix) logline += ' ' + this._format(last.prefix, this.prefixStyle)
     logline += ' ' + last.message.split(/\r?\n/)[0]
     values.logline = logline
   }
@@ -234,22 +234,30 @@ log.emitLog = function (m) {
   this.showProgress()
 }
 
+log._format = function (msg, style) {
+  if (!stream) return
+
+  var output = ''
+  if (this.useColor()) {
+    style = style || {}
+    if (style.fg) output += consoleControl.color(style.fg)
+    if (style.bg) output += consoleControl.color('bg' + style.bg[0].toUpperCase() + style.bg.slice(1))
+    if (style.bold) output += consoleControl.color('bold')
+    if (style.underline) output += consoleControl.color('underline')
+    if (style.inverse) output += consoleControl.color('inverse')
+    if (style.beep) output += consoleControl.beep()
+  }
+  output += msg
+  if (this.useColor()) {
+    output += consoleControl.color('reset')
+  }
+  return output
+}
+
 log.write = function (msg, style) {
   if (!stream) return
 
-  if (this.useColor()) {
-    style = style || {}
-    if (style.fg) stream.write(consoleControl.color(style.fg))
-    if (style.bg) stream.write(consoleControl.color('bg' + style.bg[0].toUpperCase() + style.bg.slice(1)))
-    if (style.bold) stream.write(consoleControl.color('bold'))
-    if (style.underline) stream.write(consoleControl.color('underline'))
-    if (style.inverse) stream.write(consoleControl.color('inverse'))
-    if (style.beep) stream.write(consoleControl.beep())
-  }
-  stream.write(msg)
-  if (this.useColor()) {
-    stream.write(consoleControl.color('reset'))
-  }
+  stream.write(this._format(msg, style))
 }
 
 log.addLevel = function (lvl, n, style, disp) {
