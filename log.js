@@ -240,11 +240,13 @@ log._format = function (msg, style) {
   var output = ''
   if (this.useColor()) {
     style = style || {}
-    if (style.fg) output += consoleControl.color(style.fg)
-    if (style.bg) output += consoleControl.color('bg' + style.bg[0].toUpperCase() + style.bg.slice(1))
-    if (style.bold) output += consoleControl.color('bold')
-    if (style.underline) output += consoleControl.color('underline')
-    if (style.inverse) output += consoleControl.color('inverse')
+    var settings = []
+    if (style.fg) settings.push(style.fg)
+    if (style.bg) settings.push('bg' + style.bg[0].toUpperCase() + style.bg.slice(1))
+    if (style.bold) settings.push('bold')
+    if (style.underline) settings.push('underline')
+    if (style.inverse) settings.push('inverse')
+    if (settings.length) output += consoleControl.color(settings)
     if (style.beep) output += consoleControl.beep()
   }
   output += msg
