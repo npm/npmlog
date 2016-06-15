@@ -5,31 +5,41 @@ var EE = require('events').EventEmitter
 var log = exports = module.exports = new EE()
 var util = require('util')
 
-var ansi = require('ansi')
 var setBlocking = require('set-blocking')
+var consoleControl = require('console-control-strings')
 
 setBlocking(true)
-log.cursor = ansi(process.stderr)
-log.stream = process.stderr
+var stream = process.stderr
+Object.defineProperty(log, 'stream', {
+  set: function (newStream) {
+    stream = newStream
+    if (this.gauge) this.gauge.setWriteTo(stream, stream)
+  },
+  get: function () {
+    return stream
+  }
+})
 
-// by default, let ansi decide based on tty-ness.
+// by default, decide based on tty-ness.
 var colorEnabled
+log.useColor = function () {
+  return colorEnabled != null ? colorEnabled : stream.isTTY
+}
+
 log.enableColor = function () {
   colorEnabled = true
-  this.cursor.enabled = true
   this.gauge.setTheme({hasColor: colorEnabled, hasUnicode: unicodeEnabled})
 }
 log.disableColor = function () {
   colorEnabled = false
-  this.cursor.enabled = false
   this.gauge.setTheme({hasColor: colorEnabled, hasUnicode: unicodeEnabled})
 }
 
 // default level
 log.level = 'info'
 
-log.gauge = new Gauge(log.cursor, {
-  tty: log.stream,
+log.gauge = new Gauge(stream, {
+  theme: {hasColor: log.useColor()},
   template: [
     {type: 'progressbar', length: 20},
     {type: 'activityIndicator', kerning: 1, length: 1},
@@ -47,12 +57,12 @@ var unicodeEnabled
 
 log.enableUnicode = function () {
   unicodeEnabled = true
-  this.gauge.setTheme({hasColor: colorEnabled, hasUnicode: unicodeEnabled})
+  this.gauge.setTheme({hasColor: this.useColor(), hasUnicode: unicodeEnabled})
 }
 
 log.disableUnicode = function () {
   unicodeEnabled = false
-  this.gauge.setTheme({hasColor: colorEnabled, hasUnicode: unicodeEnabled})
+  this.gauge.setTheme({hasColor: this.useColor(), hasUnicode: unicodeEnabled})
 }
 
 log.setGaugeThemeset = function (themes) {
@@ -225,20 +235,21 @@ log.emitLog = function (m) {
 }
 
 log.write = function (msg, style) {
-  if (!this.cursor) return
-  if (this.stream !== this.cursor.stream) {
-    this.cursor = ansi(this.stream, { enabled: colorEnabled })
-    this.gauge.setWriteTo(this.cursor, this.stream)
-  }
+  if (!stream) return
 
-  style = style || {}
-  if (style.fg) this.cursor.fg[style.fg]()
-  if (style.bg) this.cursor.bg[style.bg]()
-  if (style.bold) this.cursor.bold()
-  if (style.underline) this.cursor.underline()
-  if (style.inverse) this.cursor.inverse()
-  if (style.beep) this.cursor.beep()
-  this.cursor.write(msg).reset()
+  if (this.useColor()) {
+    style = style || {}
+    if (style.fg) stream.write(consoleControl.color(style.fg))
+    if (style.bg) stream.write(consoleControl.color('bg' + style.bg[0].toUpperCase() + style.bg.slice(1)))
+    if (style.bold) stream.write(consoleControl.color('bold'))
+    if (style.underline) stream.write(consoleControl.color('underline'))
+    if (style.inverse) stream.write(consoleControl.color('inverse'))
+    if (style.beep) stream.write(consoleControl.beep())
+  }
+  stream.write(msg)
+  if (this.useColor()) {
+    stream.write(consoleControl.color('reset'))
+  }
 }
 
 log.addLevel = function (lvl, n, style, disp) {
