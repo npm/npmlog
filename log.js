@@ -48,6 +48,8 @@ log.gauge = new Gauge(stream, {
     {type: 'logline', kerning: 1}
   ]
 })
+log.gauge.show({section: '', logline: ''})
+
 log.tracker = new Progress.TrackerGroup()
 
 // no progress bars unless asked
