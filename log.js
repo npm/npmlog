@@ -43,12 +43,11 @@ log.gauge = new Gauge(stream, {
   template: [
     {type: 'progressbar', length: 20},
     {type: 'activityIndicator', kerning: 1, length: 1},
-    {type: 'section'},
+    {type: 'section', default: ''},
     ':',
-    {type: 'logline', kerning: 1}
+    {type: 'logline', kerning: 1, default: ''}
   ]
 })
-log.gauge.show({section: '', logline: ''})
 
 log.tracker = new Progress.TrackerGroup()
 
