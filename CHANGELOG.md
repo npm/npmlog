@@ -1,3 +1,8 @@
+### v3.1.2
+
+* Update to `gauge@1.6.0` adding support for default values for template
+  items.
+
 ### v3.1.1
 
 * Update to `gauge@1.5.3` to fix to `1.x` compatibility when it comes to
