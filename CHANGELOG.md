@@ -1,3 +1,10 @@
+### v3.1.1
+
+* Update to `gauge@1.5.3` to fix to `1.x` compatibility when it comes to
+  when a progress bar is enabled.  In `1.x` if you didn't have a TTY the
+  progress bar was never shown.  In `2.x` it merely defaults to disabled,
+  but you can enable it explicitly if you still want progress updates.
+
 ### v3.1.0
 
 * Update to `gauge@2.5.2`:
