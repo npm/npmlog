@@ -84,6 +84,10 @@ Disable colors on all messages.
 
 Enable UTC timestamps to be printed before all messages.
 
+```
+1466215777036 npm info info prefix timestamp enabled
+```
+
 ## log.disableTimestamp()
 
 Disable UTC timestamps from being printed.
@@ -91,6 +95,10 @@ Disable UTC timestamps from being printed.
 ## log.enableTimestring()
 
 Enable Syslog style timestring to be printed before all messages.
+
+```
+June 18 10:09:37 npm info info prefix timestring enabled
+```
 
 ## log.disableTimestring()
 
