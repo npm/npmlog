@@ -37,3 +37,12 @@ log.error('404', 'This is a longer\n' +
                  new Error('a 404 error').stack)
 log.addLevel('noise', 10000, {beep: true})
 log.noise(false, 'LOUD NOISES')
+
+console.error('log.enableTimestamp()')
+log.enableTimestamp()
+log.info('info prefix', 'timestamp enabled')
+
+console.error('log.enableTimestring()')
+log.disableTimestamp()
+log.enableTimestring()
+log.info('info prefix', 'timestring enabled')

@@ -20,6 +20,46 @@ Object.defineProperty(log, 'stream', {
   }
 })
 
+// UTC timestamp, disabled by default.
+log.timestampEnabled = false
+log.enableTimestamp = function () {
+  this.timestampEnabled = true
+}
+log.disableTimestamp = function () {
+  this.timestampEnabled = false
+}
+
+log.timestringEnabled = false
+log.enableTimestring = function () {
+  this.timestringEnabled = true
+}
+log.disableTimestring = function () {
+  this.timestringEnabled = false
+}
+log.getTimestring = function () {
+  // http://stackoverflow.com/a/3552493/1123955
+  var monthNames = [
+    'January', 'February', 'March'
+    , 'April', 'May', 'June', 'July'
+    , 'August', 'September', 'October'
+    , 'November', 'December'
+  ]
+  var date = new Date()
+  var year      = date.getFullYear()
+  var monthName = monthNames[date.getMonth()]
+  var day       = date.getDate()
+
+  var hour  = date.getHours()
+  var min   = date.getMinutes()
+  var sec   = date.getSeconds()
+
+  if (sec < 10) { sec = '0' + sec }
+  if (min < 10) { min = '0' + min }
+  if (hour < 10) { hour = '0' + hour }
+
+  return (monthName + ' ' + day + ' ' + hour + ':' + min + ':' + sec)
+}
+
 // by default, decide based on tty-ness.
 var colorEnabled
 log.useColor = function () {
@@ -222,6 +262,14 @@ log.emitLog = function (m) {
   var disp = log.disp[m.level] || m.level
   this.clearProgress()
   m.message.split(/\r?\n/).forEach(function (line) {
+    if (this.timestampEnabled) {
+      this.write(Date.now().toString(), this.timeStyle)
+      this.write(' ')
+    }
+    if (this.timestringEnabled) {
+      this.write(this.getTimestring(), this.timeStyle)
+      this.write(' ')
+    }
     if (this.heading) {
       this.write(this.heading, this.headingStyle)
       this.write(' ')
@@ -280,8 +328,9 @@ log.addLevel = function (lvl, n, style, disp) {
   this.disp[lvl] = disp
 }
 
-log.prefixStyle = { fg: 'magenta' }
-log.headingStyle = { fg: 'white', bg: 'black' }
+log.timeStyle     = { fg: 'grey' }
+log.prefixStyle   = { fg: 'magenta' }
+log.headingStyle  = { fg: 'white', bg: 'black' }
 
 log.style = {}
 log.levels = {}
