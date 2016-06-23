@@ -39,19 +39,18 @@ log.disableTimestring = function () {
 log.getTimestring = function () {
   // http://stackoverflow.com/a/3552493/1123955
   var monthNames = [
-    'January', 'February', 'March'
-    , 'April', 'May', 'June', 'July'
-    , 'August', 'September', 'October'
-    , 'November', 'December'
+    'Jan', 'Feb', 'Mar',
+    'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep',
+    'Oct', 'Nov', 'Dec'
   ]
   var date = new Date()
-  var year      = date.getFullYear()
   var monthName = monthNames[date.getMonth()]
-  var day       = date.getDate()
+  var day = date.getDate()
 
-  var hour  = date.getHours()
-  var min   = date.getMinutes()
-  var sec   = date.getSeconds()
+  var hour = date.getHours()
+  var min = date.getMinutes()
+  var sec = date.getSeconds()
 
   if (sec < 10) { sec = '0' + sec }
   if (min < 10) { min = '0' + min }
@@ -328,9 +327,9 @@ log.addLevel = function (lvl, n, style, disp) {
   this.disp[lvl] = disp
 }
 
-log.timeStyle     = { fg: 'grey' }
-log.prefixStyle   = { fg: 'magenta' }
-log.headingStyle  = { fg: 'white', bg: 'black' }
+log.timeStyle = { fg: 'grey' }
+log.prefixStyle = { fg: 'magenta' }
+log.headingStyle = { fg: 'white', bg: 'black' }
 
 log.style = {}
 log.levels = {}
