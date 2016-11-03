@@ -71,21 +71,21 @@ function resetTracker () {
 }
 
 test('enableProgress', function (t) {
-  t.plan(7)
+  t.plan(4)
   resetTracker()
   log.disableProgress()
   actions = []
   log.enableProgress()
-  didActions(t, 'enableProgress', [ [ 'enable' ], [ 'show', {completed: 0} ] ])
+  didActions(t, 'enableProgress', [ [ 'enable' ] ])
   log.enableProgress()
   didActions(t, 'enableProgress again', [])
 })
 
 test('disableProgress', function (t) {
-  t.plan(6)
+  t.plan(4)
   resetTracker()
   log.disableProgress()
-  didActions(t, 'disableProgress', [ [ 'hide' ], [ 'disable' ] ])
+  didActions(t, 'disableProgress', [ [ 'disable' ] ])
   log.disableProgress()
   didActions(t, 'disableProgress again', [])
 })
