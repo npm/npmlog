@@ -82,12 +82,10 @@ log.enableProgress = function () {
   if (this._pause) return
   this.tracker.on('change', this.showProgress)
   this.gauge.enable()
-  this.showProgress()
 }
 
 log.disableProgress = function () {
   if (!this.progressEnabled) return
-  this.clearProgress()
   this.progressEnabled = false
   this.tracker.removeListener('change', this.showProgress)
   this.gauge.disable()
