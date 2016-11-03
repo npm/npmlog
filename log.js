@@ -52,8 +52,9 @@ log.gauge = new Gauge(stream, {
 
 log.tracker = new Progress.TrackerGroup()
 
-// no progress bars unless asked
-log.progressEnabled = false
+// we track this separately as we may need to temporarily disable the
+// display of the status bar for our own loggy purposes.
+log.progressEnabled = log.gauge.isEnabled()
 
 var unicodeEnabled
 

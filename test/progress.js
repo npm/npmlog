@@ -6,11 +6,17 @@ var log = require('../log.js')
 
 var actions = []
 log.gauge = {
+  enabled: false,
   enable: function () {
+    this.enabled = true
     actions.push(['enable'])
   },
   disable: function () {
+    this.enabled = false
     actions.push(['disable'])
+  },
+  isEnabled: function () {
+    return this.enabled
   },
   hide: function () {
     actions.push(['hide'])
