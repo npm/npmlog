@@ -79,8 +79,8 @@ log.setGaugeTemplate = function (template) {
 log.enableProgress = function () {
   if (this.progressEnabled) return
   this.progressEnabled = true
-  if (this._pause) return
   this.tracker.on('change', this.showProgress)
+  if (this._pause) return
   this.gauge.enable()
 }
 
@@ -147,6 +147,7 @@ log.showProgress = function (name, completed) {
 // temporarily stop emitting, but don't drop
 log.pause = function () {
   this._paused = true
+  if (this.progressEnabled) this.gauge.disable()
 }
 
 log.resume = function () {
@@ -158,7 +159,7 @@ log.resume = function () {
   b.forEach(function (m) {
     this.emitLog(m)
   }, this)
-  if (this.progressEnabled) this.enableProgress()
+  if (this.progressEnabled) this.gauge.enable()
 }
 
 log._buffer = []
