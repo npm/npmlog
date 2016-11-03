@@ -39,6 +39,7 @@ log.disableColor = function () {
 log.level = 'info'
 
 log.gauge = new Gauge(stream, {
+  enabled: false, // no progress bars unless asked
   theme: {hasColor: log.useColor()},
   template: [
     {type: 'progressbar', length: 20},
