@@ -17,7 +17,7 @@
   "dependencies": {
     "are-we-there-yet": "~1.1.2",
     "console-control-strings": "~1.1.0",
-    "gauge": "~2.7.1",
+    "gauge": "~2.7.3",
     "set-blocking": "~2.0.0"
   },
   "devDependencies": {
