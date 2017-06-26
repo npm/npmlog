@@ -2,7 +2,7 @@
   "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
   "name": "npmlog",
   "description": "logger for npm",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/npm/npmlog.git"
@@ -24,8 +24,5 @@
     "standard": "~7.1.2",
     "tap": "~5.7.3"
   },
-  "license": "ISC",
-  "files": [
-    "log.js"
-  ]
+  "license": "ISC"
 }
