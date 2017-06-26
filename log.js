@@ -180,9 +180,7 @@ log.log = function (lvl, prefix, message) {
     var arg = a[i - 2] = arguments[i]
 
     // resolve stack traces to a plain string.
-    if (typeof arg === 'object' && arg &&
-        (arg instanceof Error) && arg.stack) {
-
+    if (typeof arg === 'object' && arg instanceof Error && arg.stack) {
       Object.defineProperty(arg, 'stack', {
         value: stack = arg.stack + '',
         enumerable: true,
