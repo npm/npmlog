@@ -294,7 +294,7 @@ log.style = {}
 log.levels = {}
 log.disp = {}
 log.addLevel('silly', -Infinity, { inverse: true }, 'sill')
-log.addLevel('verbose', 1000, { fg: 'blue', bg: 'black' }, 'verb')
+log.addLevel('verbose', 1000, { fg: 'yellow', bg: 'black' }, 'verb')
 log.addLevel('info', 2000, { fg: 'green' })
 log.addLevel('timing', 2500, { fg: 'green', bg: 'black' })
 log.addLevel('http', 3000, { fg: 'green', bg: 'black' })
