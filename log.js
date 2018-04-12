@@ -189,7 +189,20 @@ log.log = function (lvl, prefix, message) {
     }
   }
   if (stack) a.unshift(stack + '\n')
-  message = util.format.apply(util, a)
+
+  // Make sure the depth is limited to two without manipulating the default
+  // settings for the user.
+  if (util.inspect.defaultOptions) {
+    const tmpDepth = util.inspect.defaultOptions.depth
+    try {
+      util.inspect.defaultOptions = { depth: 2 }
+      message = util.format.apply(util, a)
+    } finally {
+      util.inspect.defaultOptions = { depth: tmpDepth }
+    }
+  } else {
+    message = util.format.apply(util, a)
+  }
 
   var m = { id: id++,
             level: lvl,
