@@ -56,7 +56,7 @@ log.tracker = new Progress.TrackerGroup()
 // display of the status bar for our own loggy purposes.
 log.progressEnabled = log.gauge.isEnabled()
 
-var unicodeEnabled
+var unicodeEnabled, writeBufferingEnabled
 
 log.enableUnicode = function () {
   unicodeEnabled = true
@@ -89,6 +89,14 @@ log.disableProgress = function () {
   this.progressEnabled = false
   this.tracker.removeListener('change', this.showProgress)
   this.gauge.disable()
+}
+
+log.enableWriteBuffering = function () {
+  writeBufferingEnabled = true
+}
+
+log.disableWriteBuffering = function () {
+  writeBufferingEnabled = false
 }
 
 var trackerConstructors = ['newGroup', 'newItem', 'newStream']
@@ -263,10 +271,15 @@ log._format = function (msg, style) {
   return output
 }
 
+var _writeBuffer = ''
 log.write = function (msg, style) {
   if (!stream) return
 
-  stream.write(this._format(msg, style))
+  _writeBuffer += this._format(msg, style)
+  if (!writeBufferingEnabled || _writeBuffer.indexOf('\n') !== -1) {
+    stream.write(_writeBuffer)
+    _writeBuffer = ''
+  }
 }
 
 log.addLevel = function (lvl, n, style, disp) {
