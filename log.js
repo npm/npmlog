@@ -52,9 +52,14 @@ log.gauge = new Gauge(stream, {
 
 log.tracker = new Progress.TrackerGroup()
 
-// we track this separately as we may need to temporarily disable the
-// display of the status bar for our own loggy purposes.
-log.progressEnabled = log.gauge.isEnabled()
+if (log.gauge.isEnabled) {
+  // we track this separately as we may need to temporarily disable the
+  // display of the status bar for our own loggy purposes.
+  log.progressEnabled = log.gauge.isEnabled()
+} else {
+  // older versions of gauge do not have isEnabled, and some dependency graphs resolve to it
+  // see https://github.com/npm/npmlog/issues/48
+}
 
 var unicodeEnabled
 
