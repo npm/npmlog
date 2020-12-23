@@ -228,8 +228,9 @@ log.emitLog = function (m) {
   var disp = log.disp[m.level] != null ? log.disp[m.level] : m.level
   this.clearProgress()
   m.message.split(/\r?\n/).forEach(function (line) {
-    if (this.heading) {
-      this.write(this.heading, this.headingStyle)
+    var heading = this.heading;
+    if (heading) {
+      this.write(heading, this.headingStyle)
       this.write(' ')
     }
     this.write(disp, log.style[m.level])
