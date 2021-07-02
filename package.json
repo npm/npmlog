@@ -12,17 +12,22 @@
     "log.js"
   ],
   "scripts": {
-    "test": "standard && tap test/*.js"
+    "test": "tap test/*.js --branches=95",
+    "npmclilint": "npmcli-lint",
+    "lint": "npm run npmclilint -- \"*.*js\" \"test/**/*.*js\"",
+    "lintfix": "npm run lint -- --fix",
+    "posttest": "npm run lint --",
+    "postsnap": "npm run lintfix --"
   },
   "dependencies": {
-    "are-we-there-yet": "~1.1.2",
-    "console-control-strings": "~1.1.0",
-    "gauge": "~2.7.3",
-    "set-blocking": "~2.0.0"
+    "are-we-there-yet": "^1.1.5",
+    "console-control-strings": "^1.1.0",
+    "gauge": "^3.0.0",
+    "set-blocking": "^2.0.0"
   },
   "devDependencies": {
-    "standard": "~7.1.2",
-    "tap": "~12.5.2"
+    "@npmcli/lint": "^1.0.1",
+    "tap": "^15.0.9"
   },
   "license": "ISC"
 }

@@ -1,0 +1,44 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        node-version: [10.0.x, 10.x, 12.0.x, 12.x, 14.0.x, 14.x, 15.x, 16.x]
+        platform:
+        - os: ubuntu-latest
+          shell: bash
+        - os: macos-latest
+          shell: bash
+        - os: windows-latest
+          shell: bash
+        - os: windows-latest
+          shell: powershell
+
+    runs-on: ${{ matrix.platform.os }}
+    defaults:
+      run:
+        shell: ${{ matrix.platform.shell }}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v1.1.0
+
+      - name: Use Nodejs ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Update npm
+        run: npm i -g npm@latest
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Tap Tests
+        run: npm test
+
+      - name: List dependencies
+        run: npm ls -a
