@@ -1,3 +1,8 @@
+### v5.0.0
+
+* Drop support for node versions 6 and 8
+* Fix bug where gauge was enabled when paused
+
 ### v4.0.2
 
 * Added installation instructions.
