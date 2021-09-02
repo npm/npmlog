@@ -20,7 +20,7 @@
     "postsnap": "npm run lintfix --"
   },
   "dependencies": {
-    "are-we-there-yet": "^1.1.5",
+    "are-we-there-yet": "^2.0.0",
     "console-control-strings": "^1.1.0",
     "gauge": "^3.0.0",
     "set-blocking": "^2.0.0"
