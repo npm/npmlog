@@ -30,15 +30,16 @@ log.gauge = {
 }
 
 function recursiveMatch (t, actual, expected, desc) {
-  if (expected instanceof RegExp)
+  if (expected instanceof RegExp) {
     return t.match(actual, expected, desc + ' matches')
-  else if (typeof expected === 'boolean')
+  } else if (typeof expected === 'boolean') {
     return t.equal(!!actual, expected, desc + ' exists')
-  else if (typeof expected !== 'object' || expected == null)
+  } else if (typeof expected !== 'object' || expected == null) {
     return t.equal(actual, expected, desc + ' are equal')
-  else {
-    if (actual == null)
+  } else {
+    if (actual == null) {
       actual = {}
+    }
     Object.keys(expected).forEach(function (key) {
       recursiveMatch(t, actual && actual[key], expected[key], desc + ':' + key)
     })
@@ -49,8 +50,9 @@ function recursiveMatch (t, actual, expected, desc) {
       }
     } else {
       Object.keys(actual).forEach(function (key) {
-        if (expected[key] == null)
+        if (expected[key] == null) {
           t.fail(desc + ':' + key + ' should not be set')
+        }
       })
     }
   }
@@ -59,8 +61,9 @@ function recursiveMatch (t, actual, expected, desc) {
 function didActions (t, msg, output) {
   t.equal(actions.length, output.length, msg)
 
-  for (var cmd = 0; cmd < output.length; ++cmd)
+  for (var cmd = 0; cmd < output.length; ++cmd) {
     recursiveMatch(t, actions[cmd], output[cmd], msg + ':' + output[cmd][0])
+  }
 
   actions = []
 }
