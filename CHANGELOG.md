@@ -1,3 +1,7 @@
+### v5.0.1
+
+* update are-we-there-yet to v2.0.0.
+
 ### v5.0.0
 
 * Drop support for node versions 6 and 8
