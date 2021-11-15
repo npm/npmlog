@@ -2,7 +2,7 @@
 
 var test = require('tap').test
 var Progress = require('are-we-there-yet')
-var log = require('../log.js')
+var log = require('../')
 
 var actions = []
 log.gauge = {

@@ -7,7 +7,7 @@
     "type": "git",
     "url": "https://github.com/npm/npmlog.git"
   },
-  "main": "log.js",
+  "main": "lib/log.js",
   "files": [
     "log.js"
   ],
