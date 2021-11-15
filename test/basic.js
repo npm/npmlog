@@ -334,7 +334,7 @@ t.test('util functions', async t => {
       log.setGaugeThemeset(_themes)
     })
 
-    const themes = require('gauge/themes')
+    const themes = require('gauge/lib/themes')
     const newThemes = themes.newThemeSet()
     log.setGaugeThemeset(newThemes)
     t.match(log.gauge._themes, newThemes, 'gauge has new theme set')
