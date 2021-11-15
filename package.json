@@ -32,7 +32,6 @@
     "set-blocking": "^2.0.0"
   },
   "devDependencies": {
-    "@npmcli/lint": "^1.0.1",
     "@npmcli/template-oss": "^2.3.0",
     "tap": "^15.0.9"
   },
