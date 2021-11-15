@@ -105,7 +105,7 @@ test('showProgress', function (t) {
   log.enableProgress()
   actions = []
   log.showProgress('foo')
-  didActions(t, 'showProgress', [['show', {section: 'foo', completed: 0}]])
+  didActions(t, 'showProgress', [['show', { section: 'foo', completed: 0 }]])
 })
 
 test('clearProgress', function (t) {
