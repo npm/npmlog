@@ -2,7 +2,7 @@
 
 var test = require('tap').test
 var Progress = require('are-we-there-yet')
-var log = require('../log.js')
+var log = require('../')
 
 var actions = []
 log.gauge = {
@@ -105,7 +105,7 @@ test('showProgress', function (t) {
   log.enableProgress()
   actions = []
   log.showProgress('foo')
-  didActions(t, 'showProgress', [['show', {section: 'foo', completed: 0}]])
+  didActions(t, 'showProgress', [['show', { section: 'foo', completed: 0 }]])
 })
 
 test('clearProgress', function (t) {
