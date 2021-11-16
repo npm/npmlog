@@ -1,3 +1,7 @@
+### v6.0.0
+
+* Drop support for node 10 and non-lts versions of 12 and 14
+
 ### v5.0.1
 
 * update are-we-there-yet to v2.0.0.
