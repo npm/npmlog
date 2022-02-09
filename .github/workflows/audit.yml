@@ -1,0 +1,23 @@
+# This file is automatically added by @npmcli/template-oss. Do not edit.
+
+name: Audit
+
+on:
+  schedule:
+    # "At 01:00 on Monday" https://crontab.guru/#0_1_*_*_1
+    - cron: "0 1 * * 1"
+  workflow_dispatch:
+
+jobs:
+  audit:
+    name: npm audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Install deps
+        run: npm i --package-lock
+      - name: Audit
+        run: npm audit

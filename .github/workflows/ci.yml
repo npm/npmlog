@@ -8,6 +8,9 @@ on:
     branches:
       - main
       - latest
+  schedule:
+    # "At 02:00 on Monday" https://crontab.guru/#0_2_*_*_1
+    - cron: "0 2 * * 1"
 
 jobs:
   lint:
@@ -17,9 +20,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
-          cache: npm
       - run: npm i --prefer-online -g npm@latest
-      - run: npm ci
+      - run: npm i
       - run: npm run lint
 
   test:
@@ -33,11 +35,7 @@ jobs:
         - os: macos-latest
           shell: bash
         - os: windows-latest
-          shell: bash
-        - os: windows-latest
           shell: cmd
-        - os: windows-latest
-          shell: powershell
     runs-on: ${{ matrix.platform.os }}
     defaults:
       run:
@@ -47,8 +45,18 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
-      - run: npm i --prefer-online -g npm@latest
-      - run: npm ci
+        # node 12 and 14 ship with npm@6, which is known to fail when updating itself in windows
+      - name: Update to workable npm (windows)
+        if: matrix.platform.os == 'windows-latest' && (startsWith(matrix.node-version, '12') || startsWith(matrix.node-version, '14'))
+        run: |
+          curl -sO https://registry.npmjs.org/npm/-/npm-7.5.4.tgz
+          tar xf npm-7.5.4.tgz
+          cd package
+          node lib/npm.js install --no-fund --no-audit -g ..\npm-7.5.4.tgz
+          cd ..
+          rmdir /s /q package
+      - name: Update npm
+        run: npm i --prefer-online --no-fund --no-audit -g npm@latest
+      - run: npm -v
+      - run: npm i
       - run: npm test --ignore-scripts
-      - run: npm ls -a
