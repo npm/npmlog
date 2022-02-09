@@ -2,6 +2,20 @@
 
 * Drop support for node 10 and non-lts versions of 12 and 14
 
+### [6.0.1](https://www.github.com/npm/npmlog/compare/v6.0.0...v6.0.1) (2022-02-09)
+
+
+### Bug Fixes
+
+* evaluate this.heading only once ([3633d33](https://www.github.com/npm/npmlog/commit/3633d3395574fc87d734e31e40f4b19eaa3045c3))
+* **notice:** change blue foreground to cyan ([eba1a41](https://www.github.com/npm/npmlog/commit/eba1a413c84bf31d6d0eb2cd3b9254debb07e0fb))
+
+
+### Dependencies
+
+* @npmcli/template-oss@2.7.1 ([5e7b9f4](https://www.github.com/npm/npmlog/commit/5e7b9f42b5c6b2b32613f5164a4524cc71eeb46f))
+* are-we-there-yet@3.0.0 ([7aefa36](https://www.github.com/npm/npmlog/commit/7aefa36320a4265f2825f34db29f129f5927f41b))
+
 ### v5.0.1
 
 * update are-we-there-yet to v2.0.0.
