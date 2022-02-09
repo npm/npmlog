@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@npmcli/template-oss": "^2.7.1",
-    "tap": "^15.0.9"
+    "tap": "^15.1.6"
   },
   "license": "ISC",
   "engines": {
