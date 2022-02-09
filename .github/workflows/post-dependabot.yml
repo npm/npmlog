@@ -1,0 +1,31 @@
+# This file is automatically added by @npmcli/template-oss. Do not edit.
+
+name: "Post Dependabot Actions"
+on: pull_request
+
+jobs:
+  Install:
+    runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v1.1.1
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: npm install and commit
+        if: ${{contains(steps.metadata.outputs.dependency-names, '@npmcli/template-oss')}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --local user.email "ops+npm-cli@npmjs.com"
+          git config --local user.name "npm cli ops bot"
+          gh pr checkout ${{ github.event.pull_request.number }}
+          npm install
+          git add .
+          git commit -am "chore: postinstall for dependabot template-oss PR"
+          git push origin ${{github.ref_name}}
