@@ -28,4 +28,4 @@ jobs:
           npm install
           git add .
           git commit -am "chore: postinstall for dependabot template-oss PR"
-          git push origin ${{github.ref_name}}
+          git push
