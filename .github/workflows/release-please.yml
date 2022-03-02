@@ -14,7 +14,6 @@ jobs:
       - uses: google-github-actions/release-please-action@v2
         id: release
         with:
-          package-name: conventional-test
           release-type: node
           # If you change changelog-types be sure to also update commitlintrc.js
           changelog-types: >
