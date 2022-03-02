@@ -33,7 +33,7 @@
     "set-blocking": "^2.0.0"
   },
   "devDependencies": {
-    "@npmcli/template-oss": "^2.8.1",
+    "@npmcli/template-oss": "^2.9.1",
     "tap": "^15.1.6"
   },
   "license": "ISC",
