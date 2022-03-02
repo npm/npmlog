@@ -3,6 +3,10 @@
 name: "Post Dependabot Actions"
 on: pull_request
 
+# https://docs.github.com/en/rest/overview/permissions-required-for-github-apps
+permissions:
+  contents: write
+
 jobs:
   Install:
     runs-on: ubuntu-latest
