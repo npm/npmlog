@@ -2,6 +2,15 @@
 
 * Drop support for node 10 and non-lts versions of 12 and 14
 
+### [6.0.2](https://www.github.com/npm/npmlog/compare/v6.0.1...v6.0.2) (2022-03-11)
+
+
+### Dependencies
+
+* update gauge requirement from ^4.0.0 to ^4.0.1 ([cf52b06](https://www.github.com/npm/npmlog/commit/cf52b06b3221d0d1081c8e5c4162b7f2a9c3549d))
+* update gauge requirement from ^4.0.1 to ^4.0.2 ([#96](https://www.github.com/npm/npmlog/issues/96)) ([53063a9](https://www.github.com/npm/npmlog/commit/53063a97a3fe2c582c50ccd23b3e3f3a5c633964))
+* update gauge requirement from ^4.0.2 to ^4.0.3 ([#101](https://www.github.com/npm/npmlog/issues/101)) ([929686c](https://www.github.com/npm/npmlog/commit/929686cf3d91885218380cbec915ecdc6991842d))
+
 ### [6.0.1](https://www.github.com/npm/npmlog/compare/v6.0.0...v6.0.1) (2022-02-09)
 
 
