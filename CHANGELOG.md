@@ -1,3 +1,5 @@
+# Changelog
+
 ### v6.0.0
 
 * Drop support for node 10 and non-lts versions of 12 and 14
