@@ -20,9 +20,6 @@
     "posttest": "npm run lint",
     "postsnap": "npm run lintfix --",
     "postlint": "template-oss-check",
-    "preversion": "npm test",
-    "postversion": "npm publish",
-    "prepublishOnly": "git push origin --follow-tags",
     "snap": "tap",
     "template-oss-apply": "template-oss-apply --force"
   },
@@ -39,13 +36,17 @@
   },
   "license": "ISC",
   "engines": {
-    "node": "^12.13.0 || ^14.15.0 || >=16.0.0"
+    "node": "^14.17.0 || ^16.13.0 || >=18.0.0"
   },
   "tap": {
-    "branches": 95
+    "branches": 95,
+    "nyc-arg": [
+      "--exclude",
+      "tap-snapshots/**"
+    ]
   },
   "templateOSS": {
     "//@npmcli/template-oss": "This file is partially managed by @npmcli/template-oss. Edits may be overwritten.",
-    "version": "3.6.0"
+    "version": "4.3.2"
   }
 }
