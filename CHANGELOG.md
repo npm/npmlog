@@ -1,5 +1,20 @@
 # Changelog
 
+## [7.0.0](https://github.com/npm/npmlog/compare/v6.0.2...v7.0.0) (2022-10-14)
+
+### ⚠️ BREAKING CHANGES
+
+* `npmlog` is now compatible with the following semver range for node: `^14.17.0 || ^16.13.0 || >=18.0.0`
+
+### Features
+
+* [`b7d204d`](https://github.com/npm/npmlog/commit/b7d204dc1531770279b4bb3ccd9b406e6be2e052) [#122](https://github.com/npm/npmlog/pull/122) postinstall for dependabot template-oss PR (@lukekarrys)
+
+### Dependencies
+
+* [`01dd16e`](https://github.com/npm/npmlog/commit/01dd16e4e59fc98b82bd1c9307128d0d05551648) [#130](https://github.com/npm/npmlog/pull/130) bump gauge from 4.0.4 to 5.0.0
+* [`f896c8e`](https://github.com/npm/npmlog/commit/f896c8e649c2b3dabd98eb493387f9275e90901b) [#129](https://github.com/npm/npmlog/pull/129) bump are-we-there-yet from 3.0.1 to 4.0.0
+
 ### [6.0.2](https://github.com/npm/npmlog/compare/v6.0.1...v6.0.2) (2022-04-20)
 
 

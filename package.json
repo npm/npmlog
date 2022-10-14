@@ -2,7 +2,7 @@
   "author": "GitHub Inc.",
   "name": "npmlog",
   "description": "logger for npm",
-  "version": "6.0.2",
+  "version": "7.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/npm/npmlog.git"
