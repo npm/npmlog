@@ -1,5 +1,11 @@
 # Changelog
 
+## [7.0.1](https://github.com/npm/npmlog/compare/v7.0.0...v7.0.1) (2022-10-19)
+
+### Bug Fixes
+
+* [`add709d`](https://github.com/npm/npmlog/commit/add709df1974412b2b298cee13abb6b72dbf88d0) [#133](https://github.com/npm/npmlog/pull/133) do not enable progress while paused (@lukekarrys)
+
 ## [7.0.0](https://github.com/npm/npmlog/compare/v6.0.2...v7.0.0) (2022-10-14)
 
 ### ⚠️ BREAKING CHANGES
