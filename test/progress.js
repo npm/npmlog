@@ -70,6 +70,7 @@ function didActions (t, msg, output) {
 
 function resetTracker () {
   log.disableProgress()
+  log.resume()
   log.tracker = new Progress.TrackerGroup()
   log.enableProgress()
   actions = []
@@ -212,4 +213,28 @@ test('newStream', function (t) {
     logline: true,
   }]])
   t.equal(log.tracker.completed(), 1, 'Overall completion')
+})
+
+test('enableProgress while paused', function (t) {
+  t.plan(2)
+  resetTracker()
+  log.disableProgress()
+  actions = []
+  log.pause()
+  log.enableProgress()
+  didActions(t, 'enableProgress', [])
+  log.enableProgress()
+  didActions(t, 'enableProgress again', [])
+})
+
+test('pause while enableProgress', function (t) {
+  t.plan(8)
+  resetTracker()
+  log.disableProgress()
+  actions = []
+  log.enableProgress()
+  log.pause()
+  didActions(t, 'enableProgress', [['enable'], ['disable']])
+  log.resume()
+  didActions(t, 'enableProgress', [['enable']])
 })
