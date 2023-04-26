@@ -97,7 +97,7 @@ test('disableProgress', function (t) {
 })
 
 test('showProgress', function (t) {
-  t.plan(6)
+  t.plan(13)
   resetTracker()
   log.disableProgress()
   actions = []
@@ -107,16 +107,29 @@ test('showProgress', function (t) {
   actions = []
   log.showProgress('foo')
   didActions(t, 'showProgress', [['show', { section: 'foo', completed: 0 }]])
+  actions = []
+  log.log('info', undefined, 'foo')
+  actions = []
+  log.showProgress('foo')
+  didActions(t, 'showProgress', [
+    ['show', { section: 'foo', subsection: '', completed: 0, logline: 'info foo' }],
+  ])
+  log.record.length = 0
 })
 
 test('clearProgress', function (t) {
-  t.plan(4)
+  t.plan(6)
   resetTracker()
   log.clearProgress()
   didActions(t, 'clearProgress', [['hide']])
   log.disableProgress()
   actions = []
   log.clearProgress()
+  didActions(t, 'clearProgress disabled', [])
+  actions = []
+  log.clearProgress(() => {
+    t.ok('called cb')
+  })
   didActions(t, 'clearProgress disabled', [])
 })
 
