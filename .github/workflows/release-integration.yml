@@ -1,0 +1,68 @@
+# This file is automatically added by @npmcli/template-oss. Do not edit.
+
+name: Release Integration
+
+on:
+  workflow_dispatch:
+    inputs:
+      releases:
+        required: true
+        type: string
+        description: 'A json array of releases. Required fields: publish: tagName, publishTag. publish check: pkgName, version'
+  workflow_call:
+    inputs:
+      releases:
+        required: true
+        type: string
+        description: 'A json array of releases. Required fields: publish: tagName, publishTag. publish check: pkgName, version'
+
+jobs:
+  publish:
+    name: Check Publish
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Git User
+        run: |
+          git config --global user.email "npm-cli+bot@github.com"
+          git config --global user.name "npm CLI robot"
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        id: node
+        with:
+          node-version: 20.x
+          check-latest: contains('20.x', '.x')
+      - name: Install Latest npm
+        uses: ./.github/actions/install-latest-npm
+        with:
+          node: ${{ steps.node.outputs.node-version }}
+      - name: Install Dependencies
+        run: npm i --ignore-scripts --no-audit --no-fund
+      - name: Check If Published
+        run: |
+          EXIT_CODE=0
+
+          function each_release {
+            if npm view "$@" --loglevel=error > /dev/null; then
+              echo 0
+            else
+              echo 1
+            fi
+          }
+
+          for release in $(echo '${{ inputs.releases }}' | jq -r '.[] | @base64'); do
+            SPEC="$(echo "$release" | base64 --decode | jq -r .pkgName)@$(echo "$release" | base64 --decode | jq -r .version)"
+            STATUS=$(each_release "$SPEC")
+            if [[ "$STATUS" -eq 1 ]]; then
+              EXIT_CODE=$STATUS
+              echo "$SPEC ERROR"
+            else
+              echo "$SPEC OK"
+            fi
+          done
+
+          exit $EXIT_CODE
