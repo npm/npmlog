@@ -251,3 +251,14 @@ test('pause while enableProgress', function (t) {
   log.resume()
   didActions(t, 'enableProgress', [['enable']])
 })
+
+test('trackerRemoveAllListeners', function (t) {
+  t.plan(2)
+  resetTracker()
+  log.disableProgress()
+  actions = []
+  log.enableProgress()
+  t.equal(log.tracker.listenerCount('change'), 1)
+  log.trackerRemoveAllListeners()
+  t.equal(log.tracker.listenerCount('change'), 0)
+})
