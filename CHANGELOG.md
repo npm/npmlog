@@ -1,5 +1,13 @@
 # Changelog
 
+## [7.0.2](https://github.com/npm/npmlog/compare/v7.0.1...v7.0.2) (2024-04-21)
+
+### Chores
+
+* [`567d24e`](https://github.com/npm/npmlog/commit/567d24ec44e1d07da853dbdb6120f2077ae0cdc1) [#141](https://github.com/npm/npmlog/pull/141) coverage improvements (#141) (@nlf)
+* [`bd9bd0e`](https://github.com/npm/npmlog/commit/bd9bd0e3e9533eb7c9a82f30e1428f3597c5c8b2) [#179](https://github.com/npm/npmlog/pull/179) postinstall for dependabot template-oss PR (@lukekarrys)
+* [`19c29f4`](https://github.com/npm/npmlog/commit/19c29f4c1902e770049849365b22216ca5ea929d) [#179](https://github.com/npm/npmlog/pull/179) bump @npmcli/template-oss from 4.21.3 to 4.21.4 (@dependabot[bot])
+
 ## [7.0.1](https://github.com/npm/npmlog/compare/v7.0.0...v7.0.1) (2022-10-19)
 
 ### Bug Fixes
