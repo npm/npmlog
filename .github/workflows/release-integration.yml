@@ -25,17 +25,17 @@ jobs:
         shell: bash
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup Git User
         run: |
           git config --global user.email "npm-cli+bot@github.com"
           git config --global user.name "npm CLI robot"
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         id: node
         with:
-          node-version: 20.x
-          check-latest: contains('20.x', '.x')
+          node-version: 22.x
+          check-latest: contains('22.x', '.x')
       - name: Install Latest npm
         uses: ./.github/actions/install-latest-npm
         with:
@@ -46,17 +46,10 @@ jobs:
         run: |
           EXIT_CODE=0
 
-          function each_release {
-            if npm view "$@" --loglevel=error > /dev/null; then
-              echo 0
-            else
-              echo 1
-            fi
-          }
-
           for release in $(echo $RELEASES | jq -r '.[] | @base64'); do
             SPEC="$(echo "$release" | base64 --decode | jq -r .pkgName)@$(echo "$release" | base64 --decode | jq -r .version)"
-            STATUS=$(each_release "$SPEC")
+            npm view "$SPEC" --json
+            STATUS=$?
             if [[ "$STATUS" -eq 1 ]]; then
               EXIT_CODE=$STATUS
               echo "$SPEC ERROR"
